@@ -20,7 +20,7 @@ namespace SPX_WEBAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-            var spxRecord = await _repository.GetByKey(id);
+            var spxRecord = await _repository.GetById(id);
 
             if (spxRecord == null)
             {
@@ -42,29 +42,45 @@ namespace SPX_WEBAPI.Controllers
         public async Task<IActionResult> Post([FromBody] SpxDto spxDto)
         {
             var newSpxRecord = new Spx(id: 0, spxDto.Date, spxDto.Close, spxDto.Open, spxDto.High, spxDto.Low);
-            var insertedRecord = await _repository.Insert(newSpxRecord);
+            await _repository.Insert(newSpxRecord);
 
-            return Created($"https://localhost:5000/Spx/{newSpxRecord.Id}", insertedRecord);
+            return Created($"https://localhost:5000/Spx/{newSpxRecord.Id}", newSpxRecord);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromRoute] int id, [FromBody] SpxDto spxDto)
         {
-            var databaseSpxRecord = await _repository.GetByKey(id);
+            var databaseSpxRecord = await _repository.GetById(id);
 
             if (databaseSpxRecord == null)
             {
                 var newSpxRecord = new Spx(id: 0, spxDto.Date, spxDto.Close, spxDto.Open, spxDto.High, spxDto.Low);
-                var insertedRecord = await _repository.Insert(newSpxRecord);
+                await _repository.Insert(newSpxRecord);
 
-                return Created($"https://localhost:5000/Spx/{newSpxRecord.Id}", insertedRecord);
+                return Created($"https://localhost:5000/Spx/{newSpxRecord.Id}", newSpxRecord);
             }
 
             databaseSpxRecord.EditInfo(spxDto.Date, spxDto.Close, spxDto.Open, spxDto.High, spxDto.Low);
 
-            var updated = await _repository.Update(databaseSpxRecord);
+            await _repository.Update(databaseSpxRecord);
 
-            return Ok(updated);
+            return Ok(databaseSpxRecord);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var databaseSpxRecord = await _repository.GetById(id);
+
+            if (databaseSpxRecord == null)
+            {
+                return NoContent();
+            }
+
+            await _repository.Delete(id);
+
+            return Ok(databaseSpxRecord);
+        }
+
     }
 }
