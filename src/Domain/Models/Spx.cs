@@ -34,5 +34,14 @@ namespace SPX_WEBAPI.Domain.Models
             High = high;
             Low = low;
         }
+
+        public void EditInfo(DateTime date, decimal close, decimal open, decimal high, decimal low)
+        {
+            Date = date;
+            Close = close;
+            Open = open;
+            High = high;
+            Low = low;
+        }
     }
 }
