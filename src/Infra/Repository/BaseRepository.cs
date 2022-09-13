@@ -1,4 +1,5 @@
-﻿using SPX_WEBAPI.Infra.Data;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using SPX_WEBAPI.Infra.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +56,6 @@ namespace SPX_WEBAPI.Infra.Repository
             {
                 _context.Add(entity);
                 _context.SaveChanges();
-                return entity;
             });
         }
 
@@ -65,7 +65,15 @@ namespace SPX_WEBAPI.Infra.Repository
             {
                 _context.Update(entity);
                 _context.SaveChanges();
-                return entity;
+            });
+        }
+
+        public Task UpdatePatch(T entity, JsonPatchDocument entityUpdated)
+        {
+            return Task.Run(() =>
+            {
+                entityUpdated.ApplyTo(entity);
+                _context.SaveChanges();
             });
         }
     }

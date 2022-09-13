@@ -23,6 +23,9 @@ namespace SPX_WEBAPI
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             builder.Services.AddTransient<InMemoryDataGenerator>();
 
+            // Add JSonPatch to use HttpPatch method
+            builder.Services.AddControllers().AddNewtonsoftJson();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
