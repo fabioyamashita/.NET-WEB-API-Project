@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using SPX_WEBAPI.Domain.Dto;
 using SPX_WEBAPI.Domain.Models;
@@ -78,6 +79,21 @@ namespace SPX_WEBAPI.Controllers
             }
 
             await _repository.Delete(id);
+
+            return Ok(databaseSpxRecord);
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch([FromRoute] int id, [FromBody] JsonPatchDocument spxDto)
+        {
+            var databaseSpxRecord = await _repository.GetById(id);
+
+            if (databaseSpxRecord == null)
+            {
+                return NotFound("Id not found");
+            }
+
+            await _repository.UpdatePatch(databaseSpxRecord, spxDto);
 
             return Ok(databaseSpxRecord);
         }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SPX_WEBAPI.Infra.Repository
@@ -10,5 +11,6 @@ namespace SPX_WEBAPI.Infra.Repository
         Task<T> GetById(int key);
         Task Insert(T entity);
         Task Update(T entity);
+        Task UpdatePatch(T entity, JsonPatchDocument entityUpdated);
     }
 }
