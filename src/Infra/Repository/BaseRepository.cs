@@ -15,7 +15,7 @@ namespace SPX_WEBAPI.Infra.Repository
             _context = inMemoryContext;
         }
 
-        public Task<int> Delete(int key)
+        public Task Delete(int key)
         {
             return Task.Run(() =>
             {
@@ -41,7 +41,7 @@ namespace SPX_WEBAPI.Infra.Repository
             });
         }
 
-        public Task<T> GetByKey(int key)
+        public Task<T> GetById(int key)
         {
             return Task.Run(() =>
             {
@@ -49,7 +49,7 @@ namespace SPX_WEBAPI.Infra.Repository
             });
         }
 
-        public Task<T> Insert(T entity)
+        public Task Insert(T entity)
         {
             return Task.Run(() =>
             {
@@ -59,7 +59,7 @@ namespace SPX_WEBAPI.Infra.Repository
             });
         }
 
-        public Task<T> Update(T entity)
+        public Task Update(T entity)
         {
             return Task.Run(() =>
             {
