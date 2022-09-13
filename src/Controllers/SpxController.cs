@@ -28,5 +28,14 @@ namespace SPX_WEBAPI.Controllers
 
             return Ok(spxRecord);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] int offset, int limit)
+        {
+            var spxData = await _repository.Get(offset, limit);
+
+            return Ok(spxData);
+        }
+
     }
 }
