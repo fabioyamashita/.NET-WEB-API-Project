@@ -48,6 +48,22 @@ namespace SPX_WEBAPI.Controllers
             return Created($"https://localhost:5000/Spx/{newSpxRecord.Id}", newSpxRecord);
         }
 
+        [HttpPost("search")]
+        public async Task<IActionResult> RecordsFromDateInterval(
+            [FromQuery] int offset, [FromQuery] int limit, [FromBody] SpxDateInterval spxDateInterval)
+        {
+            var databaseSpxRecords = await _repository
+                .GetDateInterval(p => p.Date >= spxDateInterval.StartDate && p.Date <= spxDateInterval.EndDate, 
+                offset, limit);
+
+            if (databaseSpxRecords == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(databaseSpxRecords);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromRoute] int id, [FromBody] SpxDto spxDto)
         {
