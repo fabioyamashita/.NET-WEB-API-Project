@@ -32,11 +32,11 @@ namespace SPX_WEBAPI.Infra.Repository
             });
         }
 
-        public Task<IQueryable<T>> Get(int page, int maxResults)
+        public Task<IQueryable<T>> Get(int offset, int limit)
         {
             return Task.Run(() =>
             {
-                var data = _context.Set<T>().AsQueryable().Skip((page - 1) * maxResults).Take(maxResults);
+                var data = _context.Set<T>().AsQueryable().Skip((offset - 1) * limit).Take(limit);
                 return data.Any() ? data : new List<T>().AsQueryable();
             });
         }
