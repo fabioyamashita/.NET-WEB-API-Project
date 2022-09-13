@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SPX_WEBAPI.Domain.Dto;
 using SPX_WEBAPI.Domain.Models;
 using SPX_WEBAPI.Infra.Repository;
 using System.Threading.Tasks;
@@ -37,5 +38,13 @@ namespace SPX_WEBAPI.Controllers
             return Ok(spxData);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] SpxDto spxDto)
+        {
+            var newSpxRecord = new Spx(id: 0, spxDto.Date, spxDto.Close, spxDto.Open, spxDto.High, spxDto.Low);
+            var insertedRecord = await _repository.Insert(newSpxRecord);
+
+            return Created($"https://localhost:5000/Spx/{newSpxRecord.Id}", newSpxRecord);
+        }
     }
 }
