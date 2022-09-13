@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
+using SPX_WEBAPI.Domain.Dto;
 using SPX_WEBAPI.Infra.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace SPX_WEBAPI.Infra.Repository
@@ -38,6 +40,20 @@ namespace SPX_WEBAPI.Infra.Repository
             return Task.Run(() =>
             {
                 var data = _context.Set<T>().AsQueryable().Skip((offset - 1) * limit).Take(limit);
+                return data.Any() ? data : new List<T>().AsQueryable();
+            });
+        }
+
+
+        public Task<IQueryable<T>> GetDateInterval(Expression<Func<T, bool>> predicate, int offset, int limit)
+        {
+            return Task.Run(() =>
+            {
+                var data = _context.Set<T>().AsQueryable()
+                    .Where(predicate)
+                    .Skip((offset - 1) * limit)
+                    .Take(limit);
+
                 return data.Any() ? data : new List<T>().AsQueryable();
             });
         }
