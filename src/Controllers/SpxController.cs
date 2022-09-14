@@ -19,9 +19,9 @@ namespace SPX_WEBAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var spxRecord = await _repository.GetById(id);
+            var spxRecord = await _repository.GetById(db => db.Id == id);
 
             if (spxRecord == null)
             {
@@ -32,7 +32,7 @@ namespace SPX_WEBAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int offset, int limit)
+        public async Task<IActionResult> GetAllRecordsWithPagination([FromQuery] int offset, int limit)
         {
             var spxData = await _repository.Get(offset, limit);
 
@@ -40,7 +40,7 @@ namespace SPX_WEBAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] SpxDto spxDto)
+        public async Task<IActionResult> CreateNew([FromBody] SpxDto spxDto)
         {
             var newSpxRecord = new Spx(id: 0, spxDto.Date, spxDto.Close, spxDto.Open, spxDto.High, spxDto.Low);
             await _repository.Insert(newSpxRecord);
@@ -49,11 +49,11 @@ namespace SPX_WEBAPI.Controllers
         }
 
         [HttpPost("search")]
-        public async Task<IActionResult> RecordsFromDateInterval(
+        public async Task<IActionResult> SearchRecordsFromDateInterval(
             [FromQuery] int offset, [FromQuery] int limit, [FromBody] SpxDateInterval spxDateInterval)
         {
             var databaseSpxRecords = await _repository
-                .GetDateInterval(p => p.Date >= spxDateInterval.StartDate && p.Date <= spxDateInterval.EndDate, 
+                .Get(p => p.Date >= spxDateInterval.StartDate && p.Date <= spxDateInterval.EndDate, 
                 offset, limit);
 
             if (databaseSpxRecords == null)
@@ -65,9 +65,9 @@ namespace SPX_WEBAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] SpxDto spxDto)
+        public async Task<IActionResult> UpdateOrCreateRecord([FromRoute] int id, [FromBody] SpxDto spxDto)
         {
-            var databaseSpxRecord = await _repository.GetById(id);
+            var databaseSpxRecord = await _repository.GetById(db => db.Id == id);
 
             if (databaseSpxRecord == null)
             {
@@ -85,24 +85,24 @@ namespace SPX_WEBAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<IActionResult> DeleteExistingRecord([FromRoute] int id)
         {
-            var databaseSpxRecord = await _repository.GetById(id);
+            var databaseSpxRecord = await _repository.GetById(db => db.Id == id);
 
             if (databaseSpxRecord == null)
             {
                 return NoContent();
             }
 
-            await _repository.Delete(id);
+            await _repository.Delete(databaseSpxRecord);
 
-            return Ok(databaseSpxRecord);
+            return Ok();
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch([FromRoute] int id, [FromBody] JsonPatchDocument spxDto)
+        public async Task<IActionResult> UpdatePartial([FromRoute] int id, [FromBody] JsonPatchDocument spxDto)
         {
-            var databaseSpxRecord = await _repository.GetById(id);
+            var databaseSpxRecord = await _repository.GetById(db => db.Id == id);
 
             if (databaseSpxRecord == null)
             {

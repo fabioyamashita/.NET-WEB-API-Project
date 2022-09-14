@@ -18,20 +18,12 @@ namespace SPX_WEBAPI.Infra.Repository
             _context = inMemoryContext;
         }
 
-        public Task Delete(int key)
+        public Task Delete(T entity)
         {
             return Task.Run(() =>
             {
-                var entity = _context.Find<T>(key);
-
-                if (entity == null)
-                {
-                    throw new Exception("ID not found.");
-                }
-
-                _context.Remove(entity);
+                _context.Set<T>().Remove(entity);
                 _context.SaveChanges();
-                return key;
             });
         }
 
@@ -39,13 +31,16 @@ namespace SPX_WEBAPI.Infra.Repository
         {
             return Task.Run(() =>
             {
-                var data = _context.Set<T>().AsQueryable().Skip((offset - 1) * limit).Take(limit);
+                var data = _context.Set<T>().AsQueryable()
+                    .Skip((offset - 1) * limit)
+                    .Take(limit);
+
                 return data.Any() ? data : new List<T>().AsQueryable();
             });
         }
 
 
-        public Task<IQueryable<T>> GetDateInterval(Expression<Func<T, bool>> predicate, int offset, int limit)
+        public Task<IQueryable<T>> Get(Expression<Func<T, bool>> predicate, int offset, int limit)
         {
             return Task.Run(() =>
             {
@@ -58,11 +53,11 @@ namespace SPX_WEBAPI.Infra.Repository
             });
         }
 
-        public Task<T> GetById(int key)
+        public Task<T> GetById(Expression<Func<T, bool>> predicate)
         {
             return Task.Run(() =>
             {
-                return _context.Find<T>(key);
+                return _context.Set<T>().SingleOrDefault(predicate);
             });
         }
 
@@ -70,7 +65,7 @@ namespace SPX_WEBAPI.Infra.Repository
         {
             return Task.Run(() =>
             {
-                _context.Add(entity);
+                _context.Set<T>().Add(entity);
                 _context.SaveChanges();
             });
         }
@@ -79,7 +74,7 @@ namespace SPX_WEBAPI.Infra.Repository
         {
             return Task.Run(() =>
             {
-                _context.Update(entity);
+                _context.Set<T>().Update(entity);
                 _context.SaveChanges();
             });
         }
