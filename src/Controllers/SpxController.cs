@@ -25,6 +25,7 @@ namespace SPX_WEBAPI.Controllers
             _repository = repository;
         }
 
+        #region "GET - GetById"
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Spx), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -40,7 +41,9 @@ namespace SPX_WEBAPI.Controllers
 
             return Ok(spxRecord);
         }
+        #endregion
 
+        #region "GET - GetAllRecordsWithPagination"
         [HttpGet]
         [ProducesResponseType(typeof(List<Spx>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -50,7 +53,9 @@ namespace SPX_WEBAPI.Controllers
 
             return Ok(spxData);
         }
+        #endregion
 
+        #region "POST - CreateNew"
         [HttpPost]
         [ProducesResponseType(typeof(Spx), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -61,9 +66,9 @@ namespace SPX_WEBAPI.Controllers
 
             return Created($"/{GetControllerName()}/{newSpxRecord.Id}", newSpxRecord);
         }
+        #endregion
 
-
-
+        #region "POST - SearchRecordsFromDateInterval"
         [HttpPost("search")]
         [ProducesResponseType(typeof(List<Spx>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
@@ -81,7 +86,9 @@ namespace SPX_WEBAPI.Controllers
 
             return Ok(databaseSpxRecords);
         }
+        #endregion
 
+        #region "PUT - UpdateOrCreateRecord"
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(Spx), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Spx), StatusCodes.Status201Created)]
@@ -104,7 +111,9 @@ namespace SPX_WEBAPI.Controllers
 
             return Ok(databaseSpxRecord);
         }
+        #endregion
 
+        #region "DELETE - DeleteExistingRecord"
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -122,7 +131,9 @@ namespace SPX_WEBAPI.Controllers
 
             return Ok();
         }
+        #endregion
 
+        #region "PATCH - UpdatePartial"
         [HttpPatch("{id}")]
         [ProducesResponseType(typeof(Spx), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -140,6 +151,7 @@ namespace SPX_WEBAPI.Controllers
 
             return Ok(databaseSpxRecord);
         }
+        #endregion
 
         private string GetControllerName()
         {
