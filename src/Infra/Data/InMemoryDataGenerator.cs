@@ -1,4 +1,5 @@
 ﻿using SPX_WEBAPI.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,6 +30,21 @@ namespace SPX_WEBAPI.Infra.Data
                 }
 
                 _inMemoryContext.Spx.AddRange(items);
+                _inMemoryContext.SaveChanges();
+            }
+
+            if (!_inMemoryContext.Users.Any())
+            {
+                List<Users> users = new List<Users>()
+                {
+                    new Users("ADA", "admin", "admin", "Admin"),
+                    new Users("Fabio Yamashita", "fabioyamashita", "fabioyamashita", "Manager"),
+                    new Users("Jose Silva", "josesilva", "josesilva", "Developer"),
+                    new Users("Maria Carmo", "mariacarmo", "mariacarmo", "Junior"),
+                    new Users("Rosana Pereira", "rosanapereira", "rosanapereira", "Guest"),
+                };
+
+                _inMemoryContext.Users.AddRange(users);
                 _inMemoryContext.SaveChanges();
             }
         }

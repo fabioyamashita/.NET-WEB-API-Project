@@ -26,6 +26,7 @@ namespace SPX_WEBAPI
             builder.Services.AddDbContext<InMemoryContext>(options => options.UseInMemoryDatabase("Spx"));
 
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            builder.Services.AddScoped(typeof(IUsersRepository), typeof(UsersRepository));
             builder.Services.AddScoped(typeof(ILogRepository), typeof(LogTxtRepository));
             builder.Services.AddTransient<InMemoryDataGenerator>();
 
