@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace SPX_WEBAPI.Infra.Repository
+namespace SPX_WEBAPI.Infra.Interfaces
 {
     public interface IBaseRepository<T> where T : class
     {

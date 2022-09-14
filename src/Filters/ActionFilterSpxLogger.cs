@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using SPX_WEBAPI.Domain.Models;
-using SPX_WEBAPI.Infra.Repository;
+using SPX_WEBAPI.Infra.Interfaces;
 using SPX_WEBAPI.Loggers;
 using SPX_WEBAPI.Utils;
 using System;

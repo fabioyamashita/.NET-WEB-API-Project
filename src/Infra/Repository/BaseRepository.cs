@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using SPX_WEBAPI.Domain.Dto;
 using SPX_WEBAPI.Infra.Data;
+using SPX_WEBAPI.Infra.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
