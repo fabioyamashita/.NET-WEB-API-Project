@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SPX_WEBAPI.Filters;
 using SPX_WEBAPI.Infra.Data;
 using SPX_WEBAPI.Infra.Repository;
 
@@ -14,6 +15,9 @@ namespace SPX_WEBAPI
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
+            builder.Services.AddControllers(options => {
+                options.Filters.Add(typeof(ActionFilterSpxLogger));
+            });
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -21,6 +25,7 @@ namespace SPX_WEBAPI
             builder.Services.AddDbContext<InMemoryContext>(options => options.UseInMemoryDatabase("Spx"));
 
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            builder.Services.AddScoped(typeof(ILogRepository), typeof(LogTxtRepository));
             builder.Services.AddTransient<InMemoryDataGenerator>();
 
             // Add JSonPatch to use HttpPatch method

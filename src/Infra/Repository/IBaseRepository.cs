@@ -16,5 +16,6 @@ namespace SPX_WEBAPI.Infra.Repository
         Task Insert(T entity);
         Task Update(T entity);
         Task UpdatePatch(T entity, JsonPatchDocument entityUpdated);
+        Task<int> CountTotalRecords();
     }
 }
