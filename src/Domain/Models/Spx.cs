@@ -25,6 +25,11 @@ namespace SPX_WEBAPI.Domain.Models
         [JsonPropertyName("Low")]
         public decimal Low { get; set; }
 
+        public Spx()
+        {
+
+        }
+
         public Spx(int id, DateTime date, decimal close, decimal open, decimal high, decimal low)
         {
             Id = id;
@@ -42,6 +47,11 @@ namespace SPX_WEBAPI.Domain.Models
             Open = open;
             High = high;
             Low = low;
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
     }
 }

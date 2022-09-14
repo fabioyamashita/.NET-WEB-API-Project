@@ -87,5 +87,14 @@ namespace SPX_WEBAPI.Infra.Repository
                 _context.SaveChanges();
             });
         }
+
+        public Task<int> CountTotalRecords()
+        {
+            return Task.Run(() =>
+            {
+                return _context.Set<T>().Count();
+            });
+        }
+
     }
 }

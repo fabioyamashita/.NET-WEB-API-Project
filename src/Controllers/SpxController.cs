@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SPX_WEBAPI.Domain.Dto;
 using SPX_WEBAPI.Domain.Models;
 using SPX_WEBAPI.Infra.Repository;
@@ -19,10 +20,12 @@ namespace SPX_WEBAPI.Controllers
     public class SpxController : ControllerBase
     {
         private readonly IBaseRepository<Spx> _repository;
+        private readonly ILogger<SpxController> _logger;
 
-        public SpxController(IBaseRepository<Spx> repository)
+        public SpxController(IBaseRepository<Spx> repository, ILogger<SpxController> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         #region "GET - GetById"
