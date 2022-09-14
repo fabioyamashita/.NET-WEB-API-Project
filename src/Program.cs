@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SPX_WEBAPI.Filters;
 using SPX_WEBAPI.Infra.Data;
+using SPX_WEBAPI.Infra.Interfaces;
 using SPX_WEBAPI.Infra.Repository;
 
 namespace SPX_WEBAPI

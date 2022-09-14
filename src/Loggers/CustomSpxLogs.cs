@@ -1,5 +1,5 @@
 ﻿using SPX_WEBAPI.Domain.Models;
-using SPX_WEBAPI.Infra.Repository;
+using SPX_WEBAPI.Infra.Interfaces;
 using System;
 using System.Text.Json;
 

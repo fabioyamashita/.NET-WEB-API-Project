@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SPX_WEBAPI.Domain.Dto;
 using SPX_WEBAPI.Domain.Models;
-using SPX_WEBAPI.Infra.Repository;
+using SPX_WEBAPI.Infra.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
@@ -20,12 +20,10 @@ namespace SPX_WEBAPI.Controllers
     public class SpxController : ControllerBase
     {
         private readonly IBaseRepository<Spx> _repository;
-        private readonly ILogger<SpxController> _logger;
 
-        public SpxController(IBaseRepository<Spx> repository, ILogger<SpxController> logger)
+        public SpxController(IBaseRepository<Spx> repository)
         {
             _repository = repository;
-            _logger = logger;
         }
 
         #region "GET - GetById"
