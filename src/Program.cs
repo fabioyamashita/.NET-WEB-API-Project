@@ -24,7 +24,7 @@ namespace SPX_WEBAPI
             builder.Services.AddTransient<InMemoryDataGenerator>();
 
             // Add JSonPatch to use HttpPatch method
-            builder.Services.AddControllers().AddNewtonsoftJson();
+            builder.Services.AddControllers().AddNewtonsoftJson();    
 
             var app = builder.Build();
 
@@ -34,7 +34,7 @@ namespace SPX_WEBAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
@@ -42,7 +42,7 @@ namespace SPX_WEBAPI
 
             app.MapControllers();
 
-            #region Generate Database
+            #region Generate In Memory Database
             var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
             using (var scope = scopedFactory.CreateScope())
             {
