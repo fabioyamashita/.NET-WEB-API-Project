@@ -1,4 +1,4 @@
-﻿namespace SPX_WEBAPI.Domain.Models
+﻿namespace SPX_WEBAPI.AuthorizationAndAuthentication
 {
     public class Token
     {
