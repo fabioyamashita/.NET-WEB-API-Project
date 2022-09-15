@@ -119,7 +119,7 @@ namespace SPX_WEBAPI.Controllers
         #region "DELETE - DeleteExistingRecord"
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteExistingRecord([FromRoute,Required] int id)
         {
@@ -127,7 +127,7 @@ namespace SPX_WEBAPI.Controllers
 
             if (databaseSpxRecord == null)
             {
-                return NoContent();
+                return NotFound("Id not found");
             }
 
             await _repository.Delete(databaseSpxRecord);
@@ -139,7 +139,7 @@ namespace SPX_WEBAPI.Controllers
         #region "PATCH - UpdatePartial"
         [HttpPatch("{id}")]
         [ProducesResponseType(typeof(Spx), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdatePartial([FromRoute, Required] int id, [FromBody] JsonPatchDocument spxDto)
         {
@@ -147,7 +147,7 @@ namespace SPX_WEBAPI.Controllers
 
             if (databaseSpxRecord == null)
             {
-                return NoContent();
+                return NotFound("Id not found");
             }
 
             await _repository.UpdatePatch(databaseSpxRecord, spxDto);
