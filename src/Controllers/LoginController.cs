@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using SPX_WEBAPI.AuthorizationAndAuthentication;
 using SPX_WEBAPI.Domain.Models;
 using SPX_WEBAPI.Infra.Interfaces;
+using System;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
@@ -49,6 +50,5 @@ namespace SPX_WEBAPI.Controllers
 
             return Unauthorized("Incorrect login or password.");
         }
-
     }
 }

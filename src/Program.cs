@@ -31,6 +31,7 @@ namespace SPX_WEBAPI
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(ActionFilterSpxLogger));
+                options.Filters.Add(typeof(CustomGlobalExceptionFilter));
             });
 
             // Add JSonPatch to use HttpPatch method
