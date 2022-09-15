@@ -7,7 +7,7 @@ namespace SPX_WEBAPI.Infra.Interfaces
     public interface IUsersRepository
     {
         Task<List<Users>> Get(int offset, int limit);
-        Task<Users> Get(string username, string password);
+        Task<Users> Get(string username);
         Task Insert(Users user);
     }
 }

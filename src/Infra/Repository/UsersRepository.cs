@@ -2,8 +2,10 @@
 using SPX_WEBAPI.Domain.Models;
 using SPX_WEBAPI.Infra.Data;
 using SPX_WEBAPI.Infra.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace SPX_WEBAPI.Infra.Repository
@@ -30,12 +32,12 @@ namespace SPX_WEBAPI.Infra.Repository
             });
         }
 
-        public Task<Users> Get(string username, string password)
+        public Task<Users> Get(string username)
         {
             return Task.Run(() =>
             {
                 var user = _context.Users
-                    .FirstOrDefault(item => item.Username.Equals(username) && item.Password.Equals(password));
+                    .FirstOrDefault(item => item.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase));
                 return user;
             });
         }
