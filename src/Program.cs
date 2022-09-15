@@ -11,7 +11,6 @@ using SPX_WEBAPI.Infra.Repository;
 using System.Text;
 using System;
 using SPX_WEBAPI.AuthorizationAndAuthentication;
-using SPX_WEBAPI.Domain.Models;
 
 namespace SPX_WEBAPI
 {
