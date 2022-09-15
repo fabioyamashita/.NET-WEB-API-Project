@@ -13,22 +13,22 @@ namespace SPX_WEBAPI.AuthorizationAndAuthentication
 {
     public class TokenService
     {
-        private readonly Token _tokenConfiguration;
+        private readonly Token _token;
         private readonly IConfiguration _configuration;
 
-        public TokenService(Token tokenConfiguration, IConfiguration configuration)
+        public TokenService(Token token, IConfiguration configuration)
         {
-            _tokenConfiguration = tokenConfiguration;
+            _token = token;
             _configuration = configuration;
         }
 
         public string GenerateToken(Users user)
         {
             new ConfigureFromConfigurationOptions<Token>
-                (_configuration.GetSection("TokenConfiguration")).Configure(_tokenConfiguration);
+                (_configuration.GetSection("Token")).Configure(_token);
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_tokenConfiguration.Secret));
+            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_token.Secret));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -39,9 +39,9 @@ namespace SPX_WEBAPI.AuthorizationAndAuthentication
                     new Claim("module", "Web III .net"),
                     new Claim("sub","SPX-WEBAPI")
                 }),
-                Expires = DateTime.UtcNow.AddHours(_tokenConfiguration.ExpirationTimeInHours),
-                Issuer = _tokenConfiguration.Issuer,
-                Audience = _tokenConfiguration.Audience,
+                Expires = DateTime.UtcNow.AddHours(_token.ExpirationTimeInHours),
+                Issuer = _token.Issuer,
+                Audience = _token.Audience,
                 SigningCredentials =
                     new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
             };
