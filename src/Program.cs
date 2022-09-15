@@ -11,6 +11,7 @@ using SPX_WEBAPI.Infra.Repository;
 using System.Text;
 using System;
 using SPX_WEBAPI.AuthorizationAndAuthentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SPX_WEBAPI
 {
@@ -25,31 +26,58 @@ namespace SPX_WEBAPI
                 options.Filters.Add(typeof(ActionFilterSpxLogger));
             });
 
+            // Add JSonPatch to use HttpPatch method
+            builder.Services.AddControllers().AddNewtonsoftJson();
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            #region "Creating database"
             builder.Services.AddDbContext<InMemoryContext>(options => options.UseInMemoryDatabase("Spx"));
+            #endregion
 
+            #region "Dependency injection"
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             builder.Services.AddScoped(typeof(IUsersRepository), typeof(UsersRepository));
             builder.Services.AddScoped(typeof(ILogRepository), typeof(LogTxtRepository));
             builder.Services.AddTransient<InMemoryDataGenerator>();
             builder.Services.AddSingleton<Token>();
             builder.Services.AddSingleton<TokenService>();
+            #endregion
 
+            #region "Authentication and Authorization"
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ClockSkew = TimeSpan.Zero,
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = builder.Configuration["Token:Issuer"],
+                    ValidAudience = builder.Configuration["Token:Audience"],
+                    IssuerSigningKey = 
+                        new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Token:Secret"]))
+                };
             });
 
-
-            // Add JSonPatch to use HttpPatch method
-            builder.Services.AddControllers().AddNewtonsoftJson();    
+            // Add Authorization by default for all endpoints without defining an attribute on each controller
+            builder.Services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
+            #endregion
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -58,8 +86,8 @@ namespace SPX_WEBAPI
             
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 
