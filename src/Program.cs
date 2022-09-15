@@ -1,11 +1,17 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using SPX_WEBAPI.Filters;
 using SPX_WEBAPI.Infra.Data;
 using SPX_WEBAPI.Infra.Interfaces;
 using SPX_WEBAPI.Infra.Repository;
+using System.Text;
+using System;
+using SPX_WEBAPI.AuthorizationAndAuthentication;
+using SPX_WEBAPI.Domain.Models;
 
 namespace SPX_WEBAPI
 {
@@ -29,6 +35,15 @@ namespace SPX_WEBAPI
             builder.Services.AddScoped(typeof(IUsersRepository), typeof(UsersRepository));
             builder.Services.AddScoped(typeof(ILogRepository), typeof(LogTxtRepository));
             builder.Services.AddTransient<InMemoryDataGenerator>();
+            builder.Services.AddSingleton<Token>();
+            builder.Services.AddSingleton<TokenService>();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            });
+
 
             // Add JSonPatch to use HttpPatch method
             builder.Services.AddControllers().AddNewtonsoftJson();    
