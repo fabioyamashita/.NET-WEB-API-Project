@@ -21,8 +21,15 @@ namespace SPX_WEBAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            #region "CORS Config"
+            builder.Services.AddCors(cors => cors.AddPolicy("AllowLocalhost", policy => policy
+                .WithOrigins("https://localhost:5000")
+                .AllowAnyMethod()));
+            #endregion
+
             builder.Services.AddControllers();
-            builder.Services.AddControllers(options => {
+            builder.Services.AddControllers(options =>
+            {
                 options.Filters.Add(typeof(ActionFilterSpxLogger));
             });
 
@@ -61,7 +68,7 @@ namespace SPX_WEBAPI
                     ValidateLifetime = true,
                     ValidIssuer = builder.Configuration["Token:Issuer"],
                     ValidAudience = builder.Configuration["Token:Audience"],
-                    IssuerSigningKey = 
+                    IssuerSigningKey =
                         new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Token:Secret"]))
                 };
             });
@@ -83,8 +90,10 @@ namespace SPX_WEBAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            
+
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowLocalhost");
 
             app.UseAuthentication();
             app.UseAuthorization();
