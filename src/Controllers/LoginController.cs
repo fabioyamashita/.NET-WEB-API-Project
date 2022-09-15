@@ -35,11 +35,13 @@ namespace SPX_WEBAPI.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Authenticate([FromBody] Authenticate authInfo)
         {
-            var userAdmin = new Users("admin", authInfo.Login, authInfo.Password, "admin");
-
             if (authInfo.Login.Equals(_configuration["AdminAuthentication:login"]) &&
                 authInfo.Password.Equals(_configuration["AdminAuthentication:password"]))
             {
+                var userAdmin = new Users("admin", authInfo.Login, authInfo.Password, "admin");
+
+                await _repository.Insert(userAdmin);
+
                 var token = _tokenService.GenerateToken(userAdmin);
 
                 return Ok(token);
