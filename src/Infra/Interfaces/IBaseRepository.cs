@@ -9,13 +9,13 @@ namespace SPX_WEBAPI.Infra.Interfaces
 {
     public interface IBaseRepository<T> where T : class
     {
-        Task Delete(T entity);
-        Task<IQueryable<T>> Get(int offset, int limit);
-        Task<IQueryable<T>> Get(Expression<Func<T, bool>> predicate, int offset, int limit);
-        Task<T> GetById(Expression<Func<T, bool>> predicate);
-        Task Insert(T entity);
-        Task Update(T entity);
-        Task UpdatePatch(T entity, JsonPatchDocument entityUpdated);
-        Task<int> CountTotalRecords();
+        Task DeleteAsync(T entity);
+        Task<IQueryable<T>> GetAsync(int offset, int limit);
+        Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> predicate, int offset, int limit);
+        Task<T> GetByIdAsync(Expression<Func<T, bool>> predicate);
+        Task InsertAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task UpdatePatchAsync(T entity, JsonPatchDocument entityUpdated);
+        Task<int> CountTotalRecordsAsync();
     }
 }

@@ -30,7 +30,7 @@ namespace SPX_WEBAPI.Controllers
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAllUsersWithPagination([FromQuery, Required] int offset, int limit)
         {
-            var users = await _repository.Get(offset, limit);
+            var users = await _repository.GetAsync(offset, limit);
             return Ok(users);
         }
 
@@ -40,7 +40,7 @@ namespace SPX_WEBAPI.Controllers
         public async Task<IActionResult> InsertNewUser([FromBody] UsersDto usersDto)
         {
             var user = new Users(usersDto.Name, usersDto.Username, usersDto.Password, usersDto.Role);
-            await _repository.Insert(user);
+            await _repository.InsertAsync(user);
 
             return Created("", user);
         }

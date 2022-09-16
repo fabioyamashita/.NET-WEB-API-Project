@@ -19,36 +19,27 @@ namespace SPX_WEBAPI.Infra.Repository
             _context = context;
         }
 
-        public Task<List<Users>> Get(int offset, int limit)
+        public async Task<List<Users>> GetAsync(int offset, int limit)
         {
-            return Task.Run(() =>
-            {
-                var users = _context.Users
-                    .Skip((offset - 1) * limit)
-                    .Take(limit)
-                    .ToList();
+            var users = await _context.Users
+                .Skip((offset - 1) * limit)
+                .Take(limit)
+                .ToListAsync();
 
-                return users.Any() ? users : new List<Users>();
-            });
+            return users.Any() ? users : new List<Users>();
         }
 
-        public Task<Users> Get(string username)
+        public async Task<Users> GetAsync(string username)
         {
-            return Task.Run(() =>
-            {
-                var user = _context.Users
-                    .FirstOrDefault(item => item.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase));
-                return user;
-            });
+            var user = await _context.Users
+                .FirstOrDefaultAsync(item => item.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase));
+            return user;
         }
 
-        public Task Insert(Users user)
+        public async Task InsertAsync(Users user)
         {
-            return Task.Run(() =>
-            {
-                _context.Add(user);
-                _context.SaveChanges();
-            });
+            await _context.AddAsync(user);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -6,8 +6,8 @@ namespace SPX_WEBAPI.Infra.Interfaces
 {
     public interface IUsersRepository
     {
-        Task<List<Users>> Get(int offset, int limit);
-        Task<Users> Get(string username);
-        Task Insert(Users user);
+        Task<List<Users>> GetAsync(int offset, int limit);
+        Task<Users> GetAsync(string username);
+        Task InsertAsync(Users user);
     }
 }

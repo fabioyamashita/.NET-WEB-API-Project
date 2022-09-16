@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SPX_WEBAPI.AuthorizationAndAuthentication.Interfaces;
 using SPX_WEBAPI.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,12 @@ using System.Text;
 
 namespace SPX_WEBAPI.AuthorizationAndAuthentication
 {
-    public class TokenService
+    public class TokenService : ITokenService
     {
-        private readonly Token _token;
+        private readonly IToken _token;
         private readonly IConfiguration _configuration;
 
-        public TokenService(Token token, IConfiguration configuration)
+        public TokenService(IToken token, IConfiguration configuration)
         {
             _token = token;
             _configuration = configuration;
@@ -24,7 +25,7 @@ namespace SPX_WEBAPI.AuthorizationAndAuthentication
 
         public string GenerateToken(Users user)
         {
-            new ConfigureFromConfigurationOptions<Token>
+            new ConfigureFromConfigurationOptions<IToken>
                 (_configuration.GetSection("Token")).Configure(_token);
 
             var tokenHandler = new JwtSecurityTokenHandler();
