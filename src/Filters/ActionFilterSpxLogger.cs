@@ -38,14 +38,14 @@ namespace SPX_WEBAPI.Filters
 
                     if (context.ContainsRequestMethods(HttpMethod.Put))
                     {
-                        id = _repository.Get(_repository.CountTotalRecords().Result, 1).Result.First().Id;
+                        id = _repository.GetAsync(_repository.CountTotalRecordsAsync().Result, 1).Result.First().Id;
                     }
                     else if (context.ContainsRequestMethods(HttpMethod.Patch))
                     {
                         id = int.Parse(context.HttpContext.Request.Path.ToString().Split("/").Last());
                     }
 
-                    var spxCurrentState = _repository.GetById(db => db.Id == id).Result;
+                    var spxCurrentState = _repository.GetByIdAsync(db => db.Id == id).Result;
 
                     CustomSpxLogs.SaveLog(_logRepository, _spxPreviousState, spxCurrentState);
                 }
@@ -64,7 +64,7 @@ namespace SPX_WEBAPI.Filters
             {
                 var id = int.Parse(context.ActionArguments["id"].ToString());
 
-                var _spxPreviousStateCopy = _repository.GetById(db => db.Id == id).Result;
+                var _spxPreviousStateCopy = _repository.GetByIdAsync(db => db.Id == id).Result;
 
                 if (_spxPreviousStateCopy != null)
                 {

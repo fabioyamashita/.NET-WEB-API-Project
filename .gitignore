@@ -351,3 +351,6 @@ MigrationBackup/
 
 #Development settings
 appsettings.Development.json
+
+#Custom Log
+spxLog.txt

@@ -33,7 +33,7 @@ namespace SPX_WEBAPI.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById([FromRoute, Required] int id)
         {
-            var spxRecord = await _repository.GetById(db => db.Id == id);
+            var spxRecord = await _repository.GetByIdAsync(db => db.Id == id);
 
             if (spxRecord == null)
             {
@@ -50,7 +50,7 @@ namespace SPX_WEBAPI.Controllers
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAllRecordsWithPagination([FromQuery, Required] int offset, [FromQuery, Required] int limit)
         {
-            var spxData = await _repository.Get(offset, limit);
+            var spxData = await _repository.GetAsync(offset, limit);
 
             return Ok(spxData);
         }
@@ -63,7 +63,7 @@ namespace SPX_WEBAPI.Controllers
         public async Task<IActionResult> CreateNew([FromBody] SpxDto spxDto)
         {
             var newSpxRecord = new Spx(id: 0, spxDto.Date, spxDto.Close, spxDto.Open, spxDto.High, spxDto.Low);
-            await _repository.Insert(newSpxRecord);
+            await _repository.InsertAsync(newSpxRecord);
 
             return Created($"/{GetControllerName()}/{newSpxRecord.Id}", newSpxRecord);
         }
@@ -77,7 +77,7 @@ namespace SPX_WEBAPI.Controllers
             [FromQuery, Required] int offset, [FromQuery, Required] int limit, [FromBody] SpxDateInterval spxDateInterval)
         {
             var databaseSpxRecords = await _repository
-                .Get(p => p.Date >= spxDateInterval.StartDate && p.Date <= spxDateInterval.EndDate,
+                .GetAsync(p => p.Date >= spxDateInterval.StartDate && p.Date <= spxDateInterval.EndDate,
                 offset, limit);
 
             if (databaseSpxRecords == null)
@@ -96,19 +96,19 @@ namespace SPX_WEBAPI.Controllers
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateOrCreateRecord([FromRoute, Required] int id, [FromBody] SpxDto spxDto)
         {
-            var databaseSpxRecord = await _repository.GetById(db => db.Id == id);
+            var databaseSpxRecord = await _repository.GetByIdAsync(db => db.Id == id);
 
             if (databaseSpxRecord == null)
             {
                 var newSpxRecord = new Spx(id: 0, spxDto.Date, spxDto.Close, spxDto.Open, spxDto.High, spxDto.Low);
-                await _repository.Insert(newSpxRecord);
+                await _repository.InsertAsync(newSpxRecord);
 
                 return Created($"/{GetControllerName()}/{newSpxRecord.Id}", newSpxRecord);
             }
 
             databaseSpxRecord.EditInfo(spxDto.Date, spxDto.Close, spxDto.Open, spxDto.High, spxDto.Low);
 
-            await _repository.Update(databaseSpxRecord);
+            await _repository.UpdateAsync(databaseSpxRecord);
 
             return Ok(databaseSpxRecord);
         }
@@ -121,14 +121,14 @@ namespace SPX_WEBAPI.Controllers
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteExistingRecord([FromRoute,Required] int id)
         {
-            var databaseSpxRecord = await _repository.GetById(db => db.Id == id);
+            var databaseSpxRecord = await _repository.GetByIdAsync(db => db.Id == id);
 
             if (databaseSpxRecord == null)
             {
                 return NotFound("Id not found");
             }
 
-            await _repository.Delete(databaseSpxRecord);
+            await _repository.DeleteAsync(databaseSpxRecord);
 
             return Ok();
         }
@@ -141,14 +141,14 @@ namespace SPX_WEBAPI.Controllers
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdatePartial([FromRoute, Required] int id, [FromBody] JsonPatchDocument spxDto)
         {
-            var databaseSpxRecord = await _repository.GetById(db => db.Id == id);
+            var databaseSpxRecord = await _repository.GetByIdAsync(db => db.Id == id);
 
             if (databaseSpxRecord == null)
             {
                 return NotFound("Id not found");
             }
 
-            await _repository.UpdatePatch(databaseSpxRecord, spxDto);
+            await _repository.UpdatePatchAsync(databaseSpxRecord, spxDto);
 
             return Ok(databaseSpxRecord);
         }

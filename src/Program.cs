@@ -12,6 +12,7 @@ using System.Text;
 using System;
 using SPX_WEBAPI.AuthorizationAndAuthentication;
 using Microsoft.AspNetCore.Authorization;
+using SPX_WEBAPI.AuthorizationAndAuthentication.Interfaces;
 
 namespace SPX_WEBAPI
 {
@@ -49,8 +50,8 @@ namespace SPX_WEBAPI
             builder.Services.AddScoped(typeof(IUsersRepository), typeof(UsersRepository));
             builder.Services.AddScoped(typeof(ILogRepository), typeof(LogTxtRepository));
             builder.Services.AddTransient<InMemoryDataGenerator>();
-            builder.Services.AddSingleton<Token>();
-            builder.Services.AddSingleton<TokenService>();
+            builder.Services.AddSingleton<ITokenService, TokenService>();
+            builder.Services.AddSingleton<IToken, Token>();
             #endregion
 
             #region "Authentication and Authorization"

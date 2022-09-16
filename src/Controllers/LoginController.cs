@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using SPX_WEBAPI.AuthorizationAndAuthentication;
+using SPX_WEBAPI.AuthorizationAndAuthentication.Interfaces;
 using SPX_WEBAPI.Domain.Models;
 using SPX_WEBAPI.Infra.Interfaces;
-using System;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
@@ -21,9 +20,9 @@ namespace SPX_WEBAPI.Controllers
     {
         private readonly IUsersRepository _repository;
         private readonly IConfiguration _configuration;
-        private readonly TokenService _tokenService;
+        private readonly ITokenService _tokenService;
 
-        public LoginController(IUsersRepository repository, IConfiguration configuration, TokenService tokenService)
+        public LoginController(IUsersRepository repository, IConfiguration configuration, ITokenService tokenService)
         {
             _repository = repository;
             _tokenService = tokenService;
@@ -41,7 +40,7 @@ namespace SPX_WEBAPI.Controllers
             {
                 var userAdmin = new Users("admin", authInfo.Login, authInfo.Password, "admin");
 
-                await _repository.Insert(userAdmin);
+                await _repository.InsertAsync(userAdmin);
 
                 var token = _tokenService.GenerateToken(userAdmin);
 

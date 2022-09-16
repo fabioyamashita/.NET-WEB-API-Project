@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
-using SPX_WEBAPI.Domain.Dto;
+using Microsoft.EntityFrameworkCore;
 using SPX_WEBAPI.Infra.Data;
 using SPX_WEBAPI.Infra.Interfaces;
 using System;
@@ -19,82 +19,57 @@ namespace SPX_WEBAPI.Infra.Repository
             _context = inMemoryContext;
         }
 
-        public Task Delete(T entity)
+        public async Task DeleteAsync(T entity)
         {
-            return Task.Run(() =>
-            {
-                _context.Set<T>().Remove(entity);
-                _context.SaveChanges();
-            });
+            _context.Set<T>().Remove(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<IQueryable<T>> Get(int offset, int limit)
+        public async Task<IQueryable<T>> GetAsync(int offset, int limit)
         {
-            return Task.Run(() =>
-            {
-                var data = _context.Set<T>().AsQueryable()
-                    .Skip((offset - 1) * limit)
-                    .Take(limit);
+            var data = _context.Set<T>().AsQueryable()
+                .Skip((offset - 1) * limit)
+                .Take(limit);
 
-                return data.Any() ? data : new List<T>().AsQueryable();
-            });
+            return await data.AnyAsync() ? data : new List<T>().AsQueryable();
         }
 
-
-        public Task<IQueryable<T>> Get(Expression<Func<T, bool>> predicate, int offset, int limit)
+        public async Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> predicate, int offset, int limit)
         {
-            return Task.Run(() =>
-            {
-                var data = _context.Set<T>().AsQueryable()
-                    .Where(predicate)
-                    .Skip((offset - 1) * limit)
-                    .Take(limit);
+            var data = _context.Set<T>().AsQueryable()
+                .Where(predicate)
+                .Skip((offset - 1) * limit)
+                .Take(limit);
 
-                return data.Any() ? data : new List<T>().AsQueryable();
-            });
+            return await data.AnyAsync() ? data : new List<T>().AsQueryable();
         }
 
-        public Task<T> GetById(Expression<Func<T, bool>> predicate)
+        public async Task<T> GetByIdAsync(Expression<Func<T, bool>> predicate)
         {
-            return Task.Run(() =>
-            {
-                return _context.Set<T>().SingleOrDefault(predicate);
-            });
+            return await _context.Set<T>().SingleOrDefaultAsync(predicate);
         }
 
-        public Task Insert(T entity)
+        public async Task InsertAsync(T entity)
         {
-            return Task.Run(() =>
-            {
-                _context.Set<T>().Add(entity);
-                _context.SaveChanges();
-            });
+            await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public Task Update(T entity)
+        public async Task UpdateAsync(T entity)
         {
-            return Task.Run(() =>
-            {
-                _context.Set<T>().Update(entity);
-                _context.SaveChanges();
-            });
+            _context.Set<T>().Update(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public Task UpdatePatch(T entity, JsonPatchDocument entityUpdated)
+        public async Task UpdatePatchAsync(T entity, JsonPatchDocument entityUpdated)
         {
-            return Task.Run(() =>
-            {
-                entityUpdated.ApplyTo(entity);
-                _context.SaveChanges();
-            });
+            entityUpdated.ApplyTo(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<int> CountTotalRecords()
+        public async Task<int> CountTotalRecordsAsync()
         {
-            return Task.Run(() =>
-            {
-                return _context.Set<T>().Count();
-            });
+            return await _context.Set<T>().CountAsync();
         }
 
     }
