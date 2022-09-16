@@ -42,14 +42,14 @@ namespace SPX_WEBAPI
             builder.Services.AddSwaggerGen();
 
             #region "Creating database"
-            builder.Services.AddDbContext<InMemoryContext>(options => options.UseInMemoryDatabase("Spx"));
+            builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration["ConnectionString:SpxDb"]);
             #endregion
 
             #region "Dependency injection"
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             builder.Services.AddScoped(typeof(IUsersRepository), typeof(UsersRepository));
             builder.Services.AddScoped(typeof(ILogRepository), typeof(LogTxtRepository));
-            builder.Services.AddTransient<InMemoryDataGenerator>();
+            builder.Services.AddTransient<DataGenerator>();
             builder.Services.AddSingleton<ITokenService, TokenService>();
             builder.Services.AddSingleton<IToken, Token>();
             #endregion
@@ -102,11 +102,11 @@ namespace SPX_WEBAPI
 
             app.MapControllers();
 
-            #region Generate In Memory Database
+            #region Generate Database
             var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
             using (var scope = scopedFactory.CreateScope())
             {
-                var service = scope.ServiceProvider.GetService<InMemoryDataGenerator>();
+                var service = scope.ServiceProvider.GetService<DataGenerator>();
                 service.Generate();
             }
             #endregion

@@ -12,11 +12,11 @@ namespace SPX_WEBAPI.Infra.Repository
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        private readonly InMemoryContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public BaseRepository(InMemoryContext inMemoryContext)
+        public BaseRepository(ApplicationDbContext context)
         {
-            _context = inMemoryContext;
+            _context = context;
         }
 
         public async Task DeleteAsync(T entity)

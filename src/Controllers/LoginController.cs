@@ -38,11 +38,17 @@ namespace SPX_WEBAPI.Controllers
             if (authInfo.Login.Equals(_configuration["AdminAuthentication:login"]) &&
                 authInfo.Password.Equals(_configuration["AdminAuthentication:password"]))
             {
-                var userAdmin = new Users("admin", authInfo.Login, authInfo.Password, "admin");
+                var user = await _repository.GetAsync(authInfo.Login);
+                Users userAdmin = null;
 
-                await _repository.InsertAsync(userAdmin);
+                if (user == null)
+                {
+                    userAdmin = new Users("admin", authInfo.Login, authInfo.Password, "admin");
 
-                var token = _tokenService.GenerateToken(userAdmin);
+                    await _repository.InsertAsync(userAdmin);
+                }
+
+                var token = _tokenService.GenerateToken(user ?? userAdmin);
 
                 return Ok(token);
             }
