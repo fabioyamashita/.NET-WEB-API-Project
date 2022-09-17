@@ -3,7 +3,7 @@
 ## 🖥️ Getting Started
 
 There are two versions of the app that you can run the tests:
-- Using a preloaded [In-Memory Database](#in-memory-database)
+- Using [In-Memory Database](#in-memory-database)
 - Using [Docker](#docker) (SQL Server)
 
 ## In-Memory Database
