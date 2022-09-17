@@ -31,8 +31,20 @@ The following concepts were applied:
 ## 🖥️ Getting Started
 
 There are two versions of the app that you can run the tests:
-- Using [In-Memory Database](#in-memory-database)
 - Using [Docker](#docker) (SQL Server)
+- Using [In-Memory Database](#in-memory-database)
+
+## Docker
+
+- Clone the repository:  
+```
+$ git clone https://github.com/fabioyamashita/.NET-WEB-API-Project.git
+```
+
+- Navigate to `src` directory and run all containers with the following command:
+```
+$ docker-compose up --build
+```
 
 ## In-Memory Database
 
@@ -65,39 +77,6 @@ $ git checkout 1d269118a03baf7e2f7a8001b6dd9b3999e2a141
 ```
 
 - **Run the application.** (`Ctrl + F5` in Visual Studio Commnunity)
-
-## Docker
-
-- Clone the repository:  
-```
-$ git clone https://github.com/fabioyamashita/.NET-WEB-API-Project.git
-```
-
-- If you already have a `mcr.microsoft.com/mssql/server:2019-latest` image on Docker, you'll need to **update** the `SA_PASSWORD` on `docker-compose.yml` and the `Password` on `appsettings.json`, according to your password.
-```
-// docker-compose.yml
-
-  sqldata:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "your_password"
-      MSSQL_PID: Express
-    ports:
-      - "1433:1433"
-```
-```
-// appsettings.json
-
-  "ConnectionStrings": {
-    "DefaultConnection": "Data Source=sqldata;Initial Catalog=SpxDb;User ID=sa;Password=your_password;Persist Security Info=True"
-  },
-```
-
-- Navigate to `src` directory and run all containers with the following command:
-```
-$ docker-compose up --build
-```
 
 ## Endpoints Tests
 
