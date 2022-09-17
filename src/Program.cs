@@ -1,19 +1,19 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using SPX_WEBAPI.AuthorizationAndAuthentication;
+using SPX_WEBAPI.AuthorizationAndAuthentication.Interfaces;
 using SPX_WEBAPI.Filters;
 using SPX_WEBAPI.Infra.Data;
 using SPX_WEBAPI.Infra.Interfaces;
 using SPX_WEBAPI.Infra.Repository;
-using System.Text;
 using System;
-using SPX_WEBAPI.AuthorizationAndAuthentication;
-using Microsoft.AspNetCore.Authorization;
-using SPX_WEBAPI.AuthorizationAndAuthentication.Interfaces;
-using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace SPX_WEBAPI
 {
@@ -71,14 +71,14 @@ namespace SPX_WEBAPI
             #endregion
 
             #region "Creating database"
-            builder.Services.AddDbContext<InMemoryContext>(options => options.UseInMemoryDatabase("Spx"));
+            builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
             #endregion
 
             #region "Dependency injection"
             builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             builder.Services.AddScoped(typeof(IUsersRepository), typeof(UsersRepository));
             builder.Services.AddScoped(typeof(ILogRepository), typeof(LogTxtRepository));
-            builder.Services.AddTransient<InMemoryDataGenerator>();
+            builder.Services.AddTransient<DataGenerator>();
             builder.Services.AddSingleton<ITokenService, TokenService>();
             builder.Services.AddSingleton<IToken, Token>();
             #endregion
@@ -125,7 +125,9 @@ namespace SPX_WEBAPI
             app.UseSwagger();
             app.UseSwaggerUI();
 
-            // app.UseHttpsRedirection();
+            DatabaseManagementService.MigrationInitialisation(app);
+
+            //app.UseHttpsRedirection();
 
             app.UseCors("AllowLocalhost");
 
@@ -134,11 +136,11 @@ namespace SPX_WEBAPI
 
             app.MapControllers();
 
-            #region Generate In Memory Database
+            #region Generate Database
             var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
             using (var scope = scopedFactory.CreateScope())
             {
-                var service = scope.ServiceProvider.GetService<InMemoryDataGenerator>();
+                var service = scope.ServiceProvider.GetService<DataGenerator>();
                 service.Generate();
             }
             #endregion

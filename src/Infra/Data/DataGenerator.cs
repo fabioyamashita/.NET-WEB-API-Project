@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace SPX_WEBAPI.Infra.Data
 {
-    public class InMemoryDataGenerator
+    public class DataGenerator
     {
-        private readonly InMemoryContext _inMemoryContext;
+        private readonly ApplicationDbContext _context;
 
-        public InMemoryDataGenerator(InMemoryContext inMemoryContext)
+        public DataGenerator(ApplicationDbContext context)
         {
-            _inMemoryContext = inMemoryContext;
+            _context = context;
         }
 
         public void Generate()
         {
-            if (!_inMemoryContext.Spx.Any())
+            if (!_context.Spx.Any())
             {
                 List<Spx> items;
 
@@ -29,11 +29,11 @@ namespace SPX_WEBAPI.Infra.Data
                     items = JsonSerializer.Deserialize<List<Spx>>(json);
                 }
 
-                _inMemoryContext.Spx.AddRange(items);
-                _inMemoryContext.SaveChanges();
+                _context.Spx.AddRange(items);
+                _context.SaveChanges();
             }
 
-            if (!_inMemoryContext.Users.Any())
+            if (!_context.Users.Any())
             {
                 List<Users> users = new List<Users>()
                 {
@@ -44,8 +44,8 @@ namespace SPX_WEBAPI.Infra.Data
                     new Users("Rosana Pereira", "rosanapereira", "rosanapereira", "Guest"),
                 };
 
-                _inMemoryContext.Users.AddRange(users);
-                _inMemoryContext.SaveChanges();
+                _context.Users.AddRange(users);
+                _context.SaveChanges();
             }
         }
     }

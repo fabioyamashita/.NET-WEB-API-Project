@@ -12,9 +12,9 @@ namespace SPX_WEBAPI.Infra.Repository
 {
     public class UsersRepository : IUsersRepository
     {
-        private readonly InMemoryContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public UsersRepository(InMemoryContext context)
+        public UsersRepository(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -32,7 +32,8 @@ namespace SPX_WEBAPI.Infra.Repository
         public async Task<Users> GetAsync(string username)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(item => item.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefaultAsync(item => item.Username.ToLower() == username.ToLower());
+
             return user;
         }
 

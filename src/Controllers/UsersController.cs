@@ -37,11 +37,18 @@ namespace SPX_WEBAPI.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Spx), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
         public async Task<IActionResult> InsertNewUser([FromBody] UsersDto usersDto)
         {
+            var userFound = await _repository.GetAsync(usersDto.Username);
+
+            if (userFound != null)
+            {
+                return Conflict("User already exists");
+            }
+
             var user = new Users(usersDto.Name, usersDto.Username, usersDto.Password, usersDto.Role);
             await _repository.InsertAsync(user);
-
             return Created("", user);
         }
     }

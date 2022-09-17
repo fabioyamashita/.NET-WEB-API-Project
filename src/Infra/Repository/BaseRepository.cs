@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using Dapper;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using SPX_WEBAPI.Domain.Models;
 using SPX_WEBAPI.Infra.Data;
 using SPX_WEBAPI.Infra.Interfaces;
 using System;
@@ -10,13 +14,15 @@ using System.Threading.Tasks;
 
 namespace SPX_WEBAPI.Infra.Repository
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : Spx
     {
-        private readonly InMemoryContext _context;
+        private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public BaseRepository(InMemoryContext inMemoryContext)
+        public BaseRepository(ApplicationDbContext context, IConfiguration configuration)
         {
-            _context = inMemoryContext;
+            _context = context;
+            _configuration = configuration;
         }
 
         public async Task DeleteAsync(T entity)
@@ -25,13 +31,31 @@ namespace SPX_WEBAPI.Infra.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<T>> GetAsync(int offset, int limit)
+        public async Task<IEnumerable<T>> GetAsync(int offset, int limit)
         {
-            var data = _context.Set<T>().AsQueryable()
-                .Skip((offset - 1) * limit)
-                .Take(limit);
+            //// using LINQ to retrieve data from context
+            //var data = _context.Set<T>().AsQueryable()
+            //    .OrderByDescending(d => d.Date)
+            //    .Skip((offset - 1) * limit)
+            //    .Take(limit);
 
-            return await data.AnyAsync() ? data : new List<T>().AsQueryable();
+            //return data.Any() ? data : new List<T>().AsQueryable();
+
+            // Using dapper
+            var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var query =
+                @"SELECT		[Id], [Date], [Close], [Open], [High], [Low]
+
+                    FROM		Spx
+
+                    ORDER BY	[Date] DESC
+
+                    OFFSET		(@offset - 1) * @limit ROWS FETCH NEXT @limit ROWS ONLY";
+
+            var data = await db.QueryAsync<T>(query, new { offset, limit });
+
+            return data.Any() ? data : new List<T>();
         }
 
         public async Task<IQueryable<T>> GetAsync(Expression<Func<T, bool>> predicate, int offset, int limit)
