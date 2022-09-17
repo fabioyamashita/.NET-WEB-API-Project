@@ -66,7 +66,7 @@ $ git clone https://github.com/fabioyamashita/.NET-WEB-API-Project.git
   },
 ```
 
-- Navigate to the directory in which you cloned the project and run all containers with the following command:
+- Navigate to `src` directory and run all containers with the following command:
 ```
 $ docker-compose up --build
 ```
