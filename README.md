@@ -1,5 +1,33 @@
 # Final Project .NET WEB API - (Let's Code by ADA)
 
+Final Project from Let's Code by ADA Bootcamp - Module 6 - Web Programming III | Web API.  
+*Due Date: 18/09/2022 - 23:59:59*
+
+You can check the detailed instructions (pt-br) on [final_project_web_III_instructions.md](https://github.com/fabioyamashita/.NET-WEB-API-Project/blob/main/final_project_web_III_instructions.md)
+
+This project is a .NET Web-API application. The data source was the S&P historical data from 2012 to 2022. You can check the json [here](https://github.com/fabioyamashita/.NET-WEB-API-Project/blob/main/src/SPXData-2012-2022.json).
+
+The following concepts were applied:
+
+- API REST
+- Controllers
+- Model Binding
+- Filters (Action, Result, Exception, Logger)
+- Authentication and Authorization
+- JWT (Bearer Token)
+- CORS
+- Environment variables
+- Extension Methods
+- Working with files
+- Repository Pattern
+- Entity Framework Core
+- Dapper
+- Docker
+- Microsoft Identity (soon...)
+- FluentValidation (soon...)
+- Serilog (soon...)  
+...
+
 ## 🖥️ Getting Started
 
 There are two versions of the app that you can run the tests:
