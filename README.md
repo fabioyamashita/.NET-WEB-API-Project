@@ -41,7 +41,12 @@ There are two versions of the app that you can run the tests:
 $ git clone https://github.com/fabioyamashita/.NET-WEB-API-Project.git
 ```
 
-- Navigate to `src` directory and run all containers with the following command:
+- Navigate to `src` directory:
+```
+$ cd .NET-WEB-API-Project\src
+```
+
+- Run all containers with the following command:
 ```
 $ docker-compose up --build
 ```
@@ -51,7 +56,11 @@ $ docker-compose up --build
 - Clone the repository:  
 ```
 $ git clone https://github.com/fabioyamashita/.NET-WEB-API-Project.git
-$ cd .NET-WEB-API-Project
+```
+
+- Navigate to `.NET-WEB-API-Project` directory:
+```
+$ cd .NET-WEB-API-Project\src
 ```
 
 - Checkout to commit `1d269118a03baf7e2f7a8001b6dd9b3999e2a141`:
