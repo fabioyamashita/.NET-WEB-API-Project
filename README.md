@@ -19,6 +19,7 @@ The following concepts were applied:
 - Environment variables
 - Extension Methods
 - Working with files
+- SOLID Principles
 - Repository Pattern
 - Entity Framework Core
 - Dapper
