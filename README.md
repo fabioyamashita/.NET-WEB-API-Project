@@ -3,8 +3,8 @@
 ## 🖥️ Getting Started
 
 There are two versions of the app that you can run the tests:
-- Using a preloaded In-Memory Database
-- Using Docker (SQL Server)
+- Using a preloaded [In-Memory Database](#in-memory-database)
+- Using [Docker](#docker) (SQL Server)
 
 ## In-Memory Database
 
@@ -36,7 +36,11 @@ $ git checkout 1d269118a03baf7e2f7a8001b6dd9b3999e2a141
   },
 ```
 
-- **Run the application.**
+- **Run the application.** (`Ctrl + F5` in Visual Studio Commnunity)
+
+## Docker
+
+Docker Instructions
 
 ## Endpoints Tests
 
@@ -50,7 +54,7 @@ You can test the endpoints using **Swagger** or **Postman**.
 
 - Import the following link to Postman: https://www.getpostman.com/collections/42fae1f2ef76aff91af3
 
-### Instructions
+## Instructions
 
 - Only the route http://localhost:5000/Login **(POST /Login in Swagger)** can be accessed without any Authentication.
 
@@ -62,8 +66,8 @@ You can test the endpoints using **Swagger** or **Postman**.
 }
 ```
 
-- Copy the token
-- In Swagger, click on `Authorize` button at top right and paste the token
+- Copy the token.
+- In Swagger, click on `Authorize` button at top right and paste the token.
 - In Postman, paste the token on `Auth` tab. See the example below:
 
 ![image](https://user-images.githubusercontent.com/98363297/190874281-7a52c95c-e4b3-423f-bd68-e66f645fd494.png)
