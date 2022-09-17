@@ -1,18 +1,19 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using SPX_WEBAPI.AuthorizationAndAuthentication;
+using SPX_WEBAPI.AuthorizationAndAuthentication.Interfaces;
 using SPX_WEBAPI.Filters;
 using SPX_WEBAPI.Infra.Data;
 using SPX_WEBAPI.Infra.Interfaces;
 using SPX_WEBAPI.Infra.Repository;
-using System.Text;
 using System;
-using SPX_WEBAPI.AuthorizationAndAuthentication;
-using Microsoft.AspNetCore.Authorization;
-using SPX_WEBAPI.AuthorizationAndAuthentication.Interfaces;
+using System.Text;
 
 namespace SPX_WEBAPI
 {
@@ -39,10 +40,38 @@ namespace SPX_WEBAPI
             builder.Services.AddControllers().AddNewtonsoftJson();
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
+            #region "Swagger Config"
+            builder.Services.AddSwaggerGen(option =>
+            {
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Insert a token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
+            });
+            #endregion
 
             #region "Creating database"
-            builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration["ConnectionString:SpxDb"]);
+            builder.Services.AddSqlServer<ApplicationDbContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
             #endregion
 
             #region "Dependency injection"
@@ -87,13 +116,18 @@ namespace SPX_WEBAPI
 
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    app.UseSwagger();
+            //    app.UseSwaggerUI();
+            //}
 
-            app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
+            DatabaseManagementService.MigrationInitialisation(app);
+
+            //app.UseHttpsRedirection();
 
             app.UseCors("AllowLocalhost");
 

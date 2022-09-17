@@ -42,7 +42,7 @@ namespace SPX_WEBAPI.Infra.Repository
             //return data.Any() ? data : new List<T>().AsQueryable();
 
             // Using dapper
-            var db = new SqlConnection(_configuration["ConnectionString:SpxDb"]);
+            var db = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
             var query =
                 @"SELECT		[Id], [Date], [Close], [Open], [High], [Low]
