@@ -60,7 +60,7 @@ $ git clone https://github.com/fabioyamashita/.NET-WEB-API-Project.git
 
 - Navigate to `.NET-WEB-API-Project` directory:
 ```
-$ cd .NET-WEB-API-Project\src
+$ cd .NET-WEB-API-Project
 ```
 
 - Checkout to commit `1d269118a03baf7e2f7a8001b6dd9b3999e2a141`:
