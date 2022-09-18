@@ -25,7 +25,7 @@ namespace SPX_WEBAPI
 
             #region "CORS Config"
             builder.Services.AddCors(cors => cors.AddPolicy("AllowLocalhost", policy => policy
-                .WithOrigins("https://localhost:5000")
+                .WithOrigins("http://localhost:5000")
                 .AllowAnyMethod()));
             #endregion
 
@@ -125,7 +125,7 @@ namespace SPX_WEBAPI
             app.UseSwagger();
             app.UseSwaggerUI();
 
-            DatabaseManagementService.MigrationInitialisation(app);
+            DatabaseManagementService.ExecuteMigration(app);
 
             //app.UseHttpsRedirection();
 
@@ -135,7 +135,7 @@ namespace SPX_WEBAPI
             app.UseAuthorization();
 
             app.MapControllers();
-
+            
             #region Generate Database
             var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
             using (var scope = scopedFactory.CreateScope())
