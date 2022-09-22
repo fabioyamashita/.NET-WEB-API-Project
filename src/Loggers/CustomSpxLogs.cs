@@ -15,14 +15,14 @@ namespace SPX_WEBAPI.Loggers
             if (spxPreviousState == null)
             {
                 message = $"{DateTime.Now.ToString("G")} - SPX Historical Data #{spxCurrentState.Id} "+
-                            $"({spxCurrentState.Date.ToString("d")}) - Created " +
+                            $"({spxCurrentState.Date?.ToString("d")}) - Created " +
                             $"{JsonSerializer.Serialize(spxCurrentState)}";
 
             }
             else
             {
                 message = $"{DateTime.Now.ToString("G")} - SPX Historical Data #{spxCurrentState.Id} " +
-                            $"({spxCurrentState.Date.ToString("d")}) " +
+                            $"({spxCurrentState.Date?.ToString("d")}) " +
                             $"- Updated from:" +
                             $"{JsonSerializer.Serialize(spxPreviousState)} " +
                             $"to {JsonSerializer.Serialize(spxCurrentState)}";
@@ -38,7 +38,7 @@ namespace SPX_WEBAPI.Loggers
         public static void SaveLog(ILogRepository _logRepository, Spx spxPreviousState)
         {
             var message = $"{DateTime.Now.ToString("G")} - SPX Historical Data #{spxPreviousState.Id}" +
-                             $" ({spxPreviousState.Date.ToString("d")}) - Deleted";
+                             $" ({spxPreviousState.Date?.ToString("d")}) - Deleted";
 
             Console.WriteLine(message);
 

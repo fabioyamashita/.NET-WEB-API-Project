@@ -11,7 +11,7 @@ namespace SPX_WEBAPI.Domain.Models
         public int Id { get; set; }
 
         [JsonPropertyName("Date")]
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         [JsonPropertyName("Close")]
         public decimal Close { get; set; }
@@ -30,7 +30,7 @@ namespace SPX_WEBAPI.Domain.Models
 
         }
 
-        public Spx(int id, DateTime date, decimal close, decimal open, decimal high, decimal low)
+        public Spx(int id, DateTime? date, decimal close, decimal open, decimal high, decimal low)
         {
             Id = id;
             Date = date;
@@ -40,7 +40,7 @@ namespace SPX_WEBAPI.Domain.Models
             Low = low;
         }
 
-        public void EditInfo(DateTime date, decimal close, decimal open, decimal high, decimal low)
+        public void EditInfo(DateTime? date, decimal close, decimal open, decimal high, decimal low)
         {
             Date = date;
             Close = close;

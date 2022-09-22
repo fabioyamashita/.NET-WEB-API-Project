@@ -2,5 +2,5 @@
 
 namespace SPX_WEBAPI.Domain.Dto
 {
-    public record SpxDto (DateTime Date, decimal Close, decimal Open, decimal High, decimal Low);
+    public record SpxDto (DateTime? Date, decimal Close, decimal Open, decimal High, decimal Low);
 }
