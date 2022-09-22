@@ -24,9 +24,10 @@ The following concepts were applied:
 - Entity Framework Core
 - Dapper
 - Docker
-- Microsoft Identity (soon...)
-- FluentValidation (soon...)
+- FluentValidation
 - Serilog (soon...)  
+- Microsoft Identity (soon...)
+
 ...
 
 ## 🖥️ Getting Started
