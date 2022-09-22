@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +14,7 @@ using SPX_WEBAPI.Filters;
 using SPX_WEBAPI.Infra.Data;
 using SPX_WEBAPI.Infra.Interfaces;
 using SPX_WEBAPI.Infra.Repository;
+using SPX_WEBAPI.Validators;
 using System;
 using System.Text;
 
@@ -30,6 +33,21 @@ namespace SPX_WEBAPI
             #endregion
 
             builder.Services.AddControllers();
+
+            #region "Fluent Validation injection"
+            // Old way
+            //builder.Services.AddControllers()
+            //    .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<UsersValidator>());
+
+            // new way
+            builder.Services
+                .AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters()
+                .AddValidatorsFromAssemblyContaining<UsersValidator>()
+                .AddValidatorsFromAssemblyContaining<SpxValidator>()
+                .AddValidatorsFromAssemblyContaining<SpxDateIntervalValidator>();
+            #endregion
+
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(ActionFilterSpxLogger));
