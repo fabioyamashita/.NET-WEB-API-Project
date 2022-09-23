@@ -96,5 +96,10 @@ namespace SPX_WEBAPI.Infra.Repository
             return await _context.Set<T>().CountAsync();
         }
 
+        public async Task<int> GetLastIdAsync()
+        {
+            var lastRecord = await _context.Set<T>().OrderBy(x => x.Id).LastAsync();
+            return lastRecord.Id;
+        }
     }
 }

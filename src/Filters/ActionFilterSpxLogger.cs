@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
+using Microsoft.Extensions.Logging;
 using SPX_WEBAPI.Domain.Models;
 using SPX_WEBAPI.Infra.Interfaces;
 using SPX_WEBAPI.Loggers;
@@ -13,14 +14,20 @@ namespace SPX_WEBAPI.Filters
 {
     public class ActionFilterSpxLogger : IResultFilter, IActionFilter
     {
+        private readonly CustomSpxLogs<ActionFilterSpxLogger> _customSpxLogs;
+        private readonly ILogger<ActionFilterSpxLogger> _logger;
         private readonly IBaseRepository<Spx> _repository;
         private readonly ILogRepository _logRepository;
         private readonly List<int> _successStatusCodes;
 
         private Spx _spxPreviousState { get; set; }
 
-        public ActionFilterSpxLogger(IBaseRepository<Spx> repository, ILogRepository logRepository)
+        public ActionFilterSpxLogger(CustomSpxLogs<ActionFilterSpxLogger> customSpxLogs,
+            ILogger<ActionFilterSpxLogger> logger,
+            IBaseRepository<Spx> repository, ILogRepository logRepository)
         {
+            _customSpxLogs = customSpxLogs;
+            _logger = logger;
             _repository = repository;
             _logRepository = logRepository;
             _successStatusCodes = new List<int>() { StatusCodes.Status200OK, StatusCodes.Status201Created };
@@ -36,23 +43,24 @@ namespace SPX_WEBAPI.Filters
                 {
                     var id = 0;
 
-                    if (context.ContainsRequestMethods(HttpMethod.Put))
+                    if (context.ContainsRequestMethods(HttpMethod.Put) &&
+                        context.HttpContext.Response.StatusCode == StatusCodes.Status201Created)
                     {
-                        id = _repository.GetAsync(_repository.CountTotalRecordsAsync().Result, 1).Result.First().Id;
+                        id = _repository.GetLastIdAsync().Result;
                     }
-                    else if (context.ContainsRequestMethods(HttpMethod.Patch))
+                    else
                     {
                         id = int.Parse(context.HttpContext.Request.Path.ToString().Split("/").Last());
                     }
 
                     var spxCurrentState = _repository.GetByIdAsync(db => db.Id == id).Result;
 
-                    CustomSpxLogs.SaveLog(_logRepository, _spxPreviousState, spxCurrentState);
+                    _customSpxLogs.SaveLog(_logRepository, _logger, _spxPreviousState, spxCurrentState);
                 }
 
                 else if (context.ContainsRequestMethods(HttpMethod.Delete))
                 {
-                    CustomSpxLogs.SaveLog(_logRepository, _spxPreviousState);
+                    _customSpxLogs.SaveLog(_logRepository, _logger, _spxPreviousState);
                 }
             }
         }
