@@ -25,7 +25,7 @@ The following concepts were applied:
 - Dapper
 - Docker
 - FluentValidation
-- Serilog (soon...)  
+- Serilog
 - Microsoft Identity (soon...)
 
 ...
