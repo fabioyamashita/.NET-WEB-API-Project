@@ -17,5 +17,6 @@ namespace SPX_WEBAPI.Infra.Interfaces
         Task UpdateAsync(T entity);
         Task UpdatePatchAsync(T entity, JsonPatchDocument entityUpdated);
         Task<int> CountTotalRecordsAsync();
+        Task<int> GetLastIdAsync();
     }
 }

@@ -1,14 +1,15 @@
-﻿using SPX_WEBAPI.Domain.Models;
+﻿using Microsoft.Extensions.Logging;
+using SPX_WEBAPI.Domain.Models;
 using SPX_WEBAPI.Infra.Interfaces;
 using System;
 using System.Text.Json;
 
 namespace SPX_WEBAPI.Loggers
 {
-    public static class CustomSpxLogs
+    public class CustomSpxLogs<T> where T : class
     {
         // Update (Put/Patch)
-        public static void SaveLog(ILogRepository _logRepository, Spx spxPreviousState, Spx spxCurrentState)
+        public void SaveLog(ILogRepository _logRepository, ILogger<T> logger ,Spx spxPreviousState, Spx spxCurrentState)
         {
             var message = "";
 
@@ -28,19 +29,18 @@ namespace SPX_WEBAPI.Loggers
                             $"to {JsonSerializer.Serialize(spxCurrentState)}";
             }
 
-
-            Console.WriteLine(message);
+            logger.LogInformation(message);
 
             _logRepository.Insert(message);
         }
 
         // Delete
-        public static void SaveLog(ILogRepository _logRepository, Spx spxPreviousState)
+        public void SaveLog(ILogRepository _logRepository, ILogger logger, Spx spxPreviousState)
         {
             var message = $"{DateTime.Now.ToString("G")} - SPX Historical Data #{spxPreviousState.Id}" +
                              $" ({spxPreviousState.Date?.ToString("d")}) - Deleted";
 
-            Console.WriteLine(message);
+            logger.LogInformation(message);
 
             _logRepository.Insert(message);
         }

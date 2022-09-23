@@ -8,12 +8,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Sinks.MSSqlServer;
 using SPX_WEBAPI.AuthorizationAndAuthentication;
 using SPX_WEBAPI.AuthorizationAndAuthentication.Interfaces;
 using SPX_WEBAPI.Filters;
 using SPX_WEBAPI.Infra.Data;
 using SPX_WEBAPI.Infra.Interfaces;
 using SPX_WEBAPI.Infra.Repository;
+using SPX_WEBAPI.Loggers;
 using SPX_WEBAPI.Validators;
 using System;
 using System.Text;
@@ -25,6 +28,21 @@ namespace SPX_WEBAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            #region "Serilog Config"
+            builder.Host.UseSerilog((context, configuration) =>
+            {
+                configuration
+                    .WriteTo.Console()
+                    .WriteTo.MSSqlServer(
+                        context.Configuration["ConnectionStrings:DefaultConnection"],
+                            sinkOptions: new MSSqlServerSinkOptions()
+                            {
+                                AutoCreateSqlTable = true,
+                                TableName = "LogAPI"
+                            });
+            });
+            #endregion
 
             #region "CORS Config"
             builder.Services.AddCors(cors => cors.AddPolicy("AllowLocalhost", policy => policy
@@ -97,6 +115,7 @@ namespace SPX_WEBAPI
             builder.Services.AddScoped(typeof(IUsersRepository), typeof(UsersRepository));
             builder.Services.AddScoped(typeof(ILogRepository), typeof(LogTxtRepository));
             builder.Services.AddTransient<DataGenerator>();
+            builder.Services.AddTransient<CustomSpxLogs<ActionFilterSpxLogger>>();
             builder.Services.AddSingleton<ITokenService, TokenService>();
             builder.Services.AddSingleton<IToken, Token>();
             #endregion
