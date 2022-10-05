@@ -10,6 +10,7 @@ This project is a .NET Web-API application. The data source was the S&P historic
 The following concepts were applied:
 
 - API REST
+- Unit Tests
 - Controllers
 - Model Binding
 - Filters (Action, Result, Exception, Logger)
