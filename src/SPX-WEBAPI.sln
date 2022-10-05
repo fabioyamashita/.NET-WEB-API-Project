@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPX-WEBAPI", "SPX-WEBAPI.csproj", "{7A0CECA8-2CD2-4C32-8BBF-2B0B0D1A6782}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPX-WEBAPI", "SPX-WEBAPI.csproj", "{7A0CECA8-2CD2-4C32-8BBF-2B0B0D1A6782}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPX-WEBAPI.Tests", "..\test\SPX-WEBAPI.Tests\SPX-WEBAPI.Tests.csproj", "{72465929-0C69-4D46-962D-C003067A9247}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7A0CECA8-2CD2-4C32-8BBF-2B0B0D1A6782}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A0CECA8-2CD2-4C32-8BBF-2B0B0D1A6782}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A0CECA8-2CD2-4C32-8BBF-2B0B0D1A6782}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72465929-0C69-4D46-962D-C003067A9247}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72465929-0C69-4D46-962D-C003067A9247}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72465929-0C69-4D46-962D-C003067A9247}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72465929-0C69-4D46-962D-C003067A9247}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
