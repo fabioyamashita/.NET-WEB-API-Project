@@ -17,7 +17,7 @@ namespace SPX_WEBAPI.Tests.Controllers
 
         public SpxControllerTests()
         {
-            _mockBaseRepository = new Mock<IBaseRepository<Spx>>(MockBehavior.Strict);
+            _mockBaseRepository = new Mock<IBaseRepository<Spx>>();
             _sut = new SpxController(_mockBaseRepository.Object);
         }
 
@@ -39,6 +39,24 @@ namespace SPX_WEBAPI.Tests.Controllers
             okObjectResult.Should().NotBeNull();
             okObjectResult?.Value.Should().BeEquivalentTo(spx);
             okObjectResult?.StatusCode.Should().Be(200);
+        }
+
+        [Fact(DisplayName = "GetById Invalid Id Returns Status Code 404")]
+        [Trait("SPX", "SPX Controller Tests")]
+        public async Task GetById_ValidId_ReturnsStatusCode404()
+        {
+            // Arrange
+            _mockBaseRepository.Setup(br => br.GetByIdAsync(It.IsAny<Expression<Func<Spx, bool>>>()).Result)
+                .Returns<Spx>(null);
+
+            // Act
+            var result = await _sut.GetById(It.IsAny<int>());
+            var notFoundObjectResult = result as NotFoundObjectResult;
+
+            // Assert
+            notFoundObjectResult.Should().NotBeNull();
+            notFoundObjectResult?.Value.Should().Be("Id not found");
+            notFoundObjectResult?.StatusCode.Should().Be(404);
         }
     }
 }
