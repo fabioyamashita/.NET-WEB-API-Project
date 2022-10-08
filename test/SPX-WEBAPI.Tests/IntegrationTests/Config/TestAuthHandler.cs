@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SPX_WEBAPI.Domain.Models;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 
@@ -26,9 +26,9 @@ namespace SPX_WEBAPI.Tests.IntegrationTests.Config
             if (_mockAuthUser.Claims.Count == 0)
                 return Task.FromResult(AuthenticateResult.Fail("Mock auth user not configured."));
 
-            var identity = new ClaimsIdentity(_mockAuthUser.Claims, "Test");
+            var identity = new ClaimsIdentity(_mockAuthUser.Claims, JwtBearerDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
-            var ticket = new AuthenticationTicket(principal, "Test");
+            var ticket = new AuthenticationTicket(principal, JwtBearerDefaults.AuthenticationScheme);
 
             var result = AuthenticateResult.Success(ticket);
 

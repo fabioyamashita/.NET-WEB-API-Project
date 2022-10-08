@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
 using SPX_WEBAPI.AuthorizationAndAuthentication;
-using SPX_WEBAPI.Domain.Models;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Xunit;
@@ -32,39 +27,26 @@ namespace SPX_WEBAPI.Tests.IntegrationTests.Config
             };
 
             Factory = new WebApiApplicationFactory<TStartup>();
-
-
             Client = Factory.CreateClient(clientOptions);
 
-            //var userData = new Authenticate
-            //{
-            //    Login = "usuario",
-            //    Password = "m1nh@s3nh@"
-            //};
-
-            //Client = Factory.WithWebHostBuilder(builder =>
-            //{
-            //    builder.ConfigureTestServices(services => services.AddScoped(_ => userData));
-            //}).CreateClient(clientOptions);
-
-            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Test");
+            //Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme);
         }
 
-        public async Task AuthenticateLoginApi()
-        {
-            var userData = new Authenticate
-            {
-                Login = "usuario",
-                Password = "m1nh@s3nh@"
-            };
+        //public async Task AuthenticateLoginApi()
+        //{
+        //    var userData = new Authenticate
+        //    {
+        //        Login = "usuario",
+        //        Password = "m1nh@s3nh@"
+        //    };
 
-            // Recreating client to avoid web config
-            Client = Factory.CreateClient();
+        //    // Recreating client to avoid web config
+        //    Client = Factory.CreateClient();
 
-            var response = await Client.PostAsJsonAsync("/Login", userData);
-            response.EnsureSuccessStatusCode();
-            UserToken = await response.Content.ReadAsStringAsync();
-        }
+        //    var response = await Client.PostAsJsonAsync("/Login", userData);
+        //    response.EnsureSuccessStatusCode();
+        //    UserToken = await response.Content.ReadAsStringAsync();
+        //}
 
         public void Dispose()
         {
