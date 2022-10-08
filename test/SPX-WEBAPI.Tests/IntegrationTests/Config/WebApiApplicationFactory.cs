@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using SPX_WEBAPI.Infra.Data;
 using System.Security.Claims;
@@ -23,13 +24,7 @@ namespace SPX_WEBAPI.Tests.IntegrationTests.Config
 
             builder.ConfigureServices(services =>
             {
-                var descriptor = services.SingleOrDefault(
-                    d => d.ServiceType ==
-                        typeof(DbContextOptions<ApplicationDbContext>));
-
-                services.Remove(descriptor);
-                
-                //services.RemoveAll(typeof(DbContextOptions<ApplicationDbContext>));
+                services.RemoveAll(typeof(DbContextOptions<ApplicationDbContext>));
 
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseInMemoryDatabase("SpxWebApiDatabase"));

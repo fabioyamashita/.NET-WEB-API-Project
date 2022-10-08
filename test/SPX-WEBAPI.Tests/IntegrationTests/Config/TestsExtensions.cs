@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace SPX_WEBAPI.Tests.IntegrationTests.Config
 {
@@ -29,16 +30,16 @@ namespace SPX_WEBAPI.Tests.IntegrationTests.Config
         {
             services.AddAuthorization(options =>
             {
-                // AuthConstants.Scheme is just a scheme we define. I called it "TestAuth"
-                options.DefaultPolicy = new AuthorizationPolicyBuilder("Test")
-                .RequireAuthenticatedUser()
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
                     .Build();
             });
 
             // Register our custom authentication handler
-            return services.AddAuthentication("Test")
+            return services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
-                    "Test", options => { });
+                    JwtBearerDefaults.AuthenticationScheme, options => { });
         }
     }
 }
