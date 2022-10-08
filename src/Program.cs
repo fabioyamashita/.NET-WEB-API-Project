@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -23,7 +24,7 @@ using System.Text;
 
 namespace SPX_WEBAPI
 {
-    public class Program
+    public partial class Program
     {
         public static void Main(string[] args)
         {
@@ -162,17 +163,31 @@ namespace SPX_WEBAPI
             app.UseSwagger();
             app.UseSwaggerUI();
 
-            DatabaseManagementService.ExecuteMigration(app);
+            /*
+             * Comment to run tests
+             */
+            if (!app.Environment.IsDevelopment())
+            {
+                DatabaseManagementService.ExecuteMigration(app);
+            }
 
             //app.UseHttpsRedirection();
 
             app.UseCors("AllowLocalhost");
 
+            app.UseCookiePolicy();
+
+            //if (!app.Environment.IsDevelopment())
+            //{
+            //    app.UseAuthentication();
+            //    app.UseAuthorization();
+            //}
+
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
-            
+
             #region Generate Database
             var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
             using (var scope = scopedFactory.CreateScope())
