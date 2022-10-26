@@ -1,7 +1,6 @@
-# Final Project .NET WEB API - (Let's Code by ADA)
+.NET WEB API Project
 
 Final Project from Let's Code by ADA Bootcamp - Module 6 - Web Programming III | Web API.  
-*Due Date: 18/09/2022 - 23:59:59*
 
 You can check the detailed instructions (pt-br) on [final_project_web_III_instructions.md](https://github.com/fabioyamashita/.NET-WEB-API-Project/blob/main/final_project_web_III_instructions.md)
 
