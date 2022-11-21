@@ -167,20 +167,24 @@ http://localhost:5000
 
 ### Spx
 
-| **Method**                                         | **Authentication?** | **Description**                                             |
-| -------------------------------------------------- | ------------------- | ----------------------------------------------------------- |
-| [`GET /spx/{id}`](#get-spxid---search-a-sp-record) | Yes                 | Search a S&P record                                         |
-| `GET /spx?page={page}&limit={limit}`               | Yes                 | Search all S&P records with pagination                      |
-| `POST /spx`                                        | Yes                 | Create a new S&P record                                     |
-| `POST /spx/search?page={page}&limit={limit}`       | Yes                 | Search all S&P records from a date interval with pagination |
-| `PUT /spx/{id}`                                    | Yes                 | Update an existing record or Create a new record            |
-| `DELETE /spx/{id}`                                 | Yes                 | Delete an existing record                                   |
+| **Method**                                                                     | **Authentication?** | **Description**                                             |
+| ------------------------------------------------------------------------------ | ------------------- | ----------------------------------------------------------- |
+| [`GET /spx/{id}`](#search-a-sp-record)                                         | Yes                 | Search a S&P record                                         |
+| [`GET /spx?page={page}&limit={limit}`](#search-all-sp-records-with-pagination) | Yes                 | Search all S&P records with pagination                      |
+| `POST /spx`                                                                    | Yes                 | Create a new S&P record                                     |
+| `POST /spx/search?page={page}&limit={limit}`                                   | Yes                 | Search all S&P records from a date interval with pagination |
+| `PUT /spx/{id}`                                                                | Yes                 | Update an existing record or Create a new record            |
+| `DELETE /spx/{id}`                                                             | Yes                 | Delete an existing record                                   |
 
 <br />
 
-## GET /spx/{id} - Search a S&P record
+## Search a S&P record
 
 This endpoint returns information about a specific S&P record from a day.
+
+### Endpoint
+
+`GET /spx/{id}`
 
 ### Request
 
@@ -234,6 +238,140 @@ See more details at...
 
 </td>
 </tr>
+
+</td>
+</tr>
+
+<tr>
+<td> 500 &ndash; Internal Server Error </td>
+<td> General error message </td>
+<td>
+
+```json
+{
+  "message": "An unexpected error has occurred!"
+}
+```
+
+</td>
+</tr>
+
+</td>
+</tr>
+</table>
+
+<br />
+
+## Search all S&P records with pagination
+
+This endpoint returns information about all S&P records with pagination.
+
+### Endpoint
+
+`GET /spx?page={page}&limit={limit}`
+
+### Query Parameters
+
+| **Name** | **Type** | **Required?** | **Description**            | **Example** |
+| -------- | -------- | ------------- | -------------------------- | ----------- |
+| page     | integer  | Yes           | Current page               | 1           |
+| limit    | integer  | Yes           | Number of records per page | 15          |
+
+### Request
+
+Request body is not necessary.
+
+### Authentication
+
+You need to append a token on header's request.
+
+Use [key, value] as ["Authorization", "Your Token JWT"].
+
+See more details at...
+
+### Responses
+
+<table>
+<tr>
+<td><strong>Status</strong></td> <td><strong>Description</strong></td><td><strong>Example</strong></td>
+</tr>
+<tr>
+<td> 200 &ndash; OK </td>
+<td> An array of records and a pagination info are returned </td>
+<td>
+
+```json
+{
+  "pagination": {
+    "first": 1,
+    "last": 1281,
+    "previous": null,
+    "next": 2,
+    "page": 1,
+    "isFirst": true,
+    "isLast": false,
+    "totalElements": 2561
+  },
+  "data": [
+    {
+      "id": 2557,
+      "date": "2022-10-10T00:00:00",
+      "close": 1520.0,
+      "open": 4500.0,
+      "high": 4200.0,
+      "low": 1250.0
+    },
+    {
+      "id": 2558,
+      "date": "2022-10-10T00:00:00",
+      "close": 1520.0,
+      "open": 4500.0,
+      "high": 4200.0,
+      "low": 1250.0
+    }
+  ]
+}
+```
+
+</td>
+</tr>
+
+<tr>
+<td> 400 &ndash; Bad Request </td>
+<td> Invalid Query parameters </td>
+<td>
+
+```json
+{
+  "errors": {
+    "page": ["The value '1s' is not valid."]
+  },
+  "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+  "title": "One or more validation errors occurred.",
+  "status": 400,
+  "traceId": "00-4860e666b17a0f18d8d98837ecc3356a-7774ce93e4f9c29f-00"
+}
+```
+
+</td>
+</tr>
+
+</td>
+</tr>
+
+</td>
+</tr>
+
+<tr>
+<td> 404 &ndash; Not Found </td>
+<td> Invalid URL </td>
+<td>
+
+```json
+{
+  "message": "Error message"
+}
+```
 
 </td>
 </tr>
